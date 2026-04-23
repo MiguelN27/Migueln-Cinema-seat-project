@@ -5,6 +5,13 @@ type SeatCountSummary = {
   available: number;
 };
 
+type AdjacentSeatSearchResult = {
+  rowLetter: string;
+  firstSeatNumber: number;
+  secondSeatNumber: number;
+  message: string;
+};
+
 function initializeSeatingMatrix(rows = 8, seatsPerRow = 10): SeatingMatrix {
   return Array.from({ length: rows }, () => Array<Seat>(seatsPerRow).fill(0));
 }
@@ -19,20 +26,16 @@ function displayScreeningRoom(seatingMatrix: SeatingMatrix): void {
     return;
   }
 
-  const seatsPerRow = seatingMatrix[0].length;
-  const columnLabels = Array.from(
-    { length: seatsPerRow },
-    (_, columnIndex) => String(seatsPerRow - columnIndex)
-  );
+  const seatsTable = seatingMatrix.map((row, rowIndex) => ({
+    row: getRowLabel(rowIndex),
+    ...row.reduce<Record<string, string>>((accumulator, seat, columnIndex) => {
+      const seatNumber = row.length - columnIndex;
+      accumulator[String(seatNumber)] = seat === 1 ? "X" : "L";
+      return accumulator;
+    }, {}),
+  }));
 
-  const header = `    ${columnLabels.map((label) => label.padStart(2, " ")).join(" ")}`;
-  console.log(header);
-
-  for (let rowIndex = 0; rowIndex < seatingMatrix.length; rowIndex += 1) {
-    const rowLabel = getRowLabel(rowIndex);
-    const rowSeats = seatingMatrix[rowIndex].map((seat) => (seat === 1 ? "X" : "L"));
-    console.log(`${rowLabel} | ${rowSeats.map((seat) => seat.padStart(2, " ")).join(" ")}`);
-  }
+  console.table(seatsTable);
 }
 
 function reserveSeat(
@@ -88,6 +91,60 @@ function countSeats(seatingMatrix: SeatingMatrix): SeatCountSummary {
   return { occupied, available };
 }
 
+function findFirstAdjacentAvailableSeats(
+  seatingMatrix: SeatingMatrix
+): AdjacentSeatSearchResult | string {
+  if (seatingMatrix.length === 0 || seatingMatrix[0].length === 0) {
+    return "No adjacent seats found, try another movie schedule!";
+  }
+
+  const seatsPerRow = seatingMatrix[0].length;
+
+  for (let rowIndex = 0; rowIndex < seatingMatrix.length; rowIndex += 1) {
+    for (let columnIndex = 0; columnIndex < seatsPerRow - 1; columnIndex += 1) {
+      if (
+        seatingMatrix[rowIndex][columnIndex] === 0 &&
+        seatingMatrix[rowIndex][columnIndex + 1] === 0
+      ) {
+        const rowLetter = getRowLabel(rowIndex);
+        const firstSeatNumber = seatsPerRow - columnIndex;
+        const secondSeatNumber = seatsPerRow - (columnIndex + 1);
+
+        return {
+          rowLetter,
+          firstSeatNumber,
+          secondSeatNumber,
+          message: `Adjacent seats found: ${rowLetter}${firstSeatNumber} and ${rowLetter}${secondSeatNumber}`,
+        };
+      }
+    }
+  }
+
+  return "No adjacent seats found, try another movie schedule!";
+}
+
+function countAdjacentAvailableSeatPairs(seatingMatrix: SeatingMatrix): number {
+  if (seatingMatrix.length === 0 || seatingMatrix[0].length === 0) {
+    return 0;
+  }
+
+  const seatsPerRow = seatingMatrix[0].length;
+  let adjacentPairs = 0;
+
+  for (let rowIndex = 0; rowIndex < seatingMatrix.length; rowIndex += 1) {
+    for (let columnIndex = 0; columnIndex < seatsPerRow - 1; columnIndex += 1) {
+      if (
+        seatingMatrix[rowIndex][columnIndex] === 0 &&
+        seatingMatrix[rowIndex][columnIndex + 1] === 0
+      ) {
+        adjacentPairs += 1;
+      }
+    }
+  }
+
+  return adjacentPairs;
+}
+
 const seatingMatrix = initializeSeatingMatrix();
 console.log("Cinema screening room (L = available, X = occupied):");
 displayScreeningRoom(seatingMatrix);
@@ -98,12 +155,17 @@ displayScreeningRoom(seatingMatrix);
 const seatCount = countSeats(seatingMatrix);
 console.log(`Occupied seats: ${seatCount.occupied}`);
 console.log(`Available seats: ${seatCount.available}`);
+console.log(findFirstAdjacentAvailableSeats(seatingMatrix));
+console.log(`Adjacent available seat pairs: ${countAdjacentAvailableSeatPairs(seatingMatrix)}`);
 
 export {
+  countAdjacentAvailableSeatPairs,
   countSeats,
   displayScreeningRoom,
+  findFirstAdjacentAvailableSeats,
   initializeSeatingMatrix,
   reserveSeat,
+  type AdjacentSeatSearchResult,
   type SeatCountSummary,
   type Seat,
   type SeatingMatrix,
