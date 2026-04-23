@@ -1,5 +1,9 @@
 type Seat = 0 | 1;
 type SeatingMatrix = Seat[][];
+type SeatCountSummary = {
+  occupied: number;
+  available: number;
+};
 
 function initializeSeatingMatrix(rows = 8, seatsPerRow = 10): SeatingMatrix {
   return Array.from({ length: rows }, () => Array<Seat>(seatsPerRow).fill(0));
@@ -67,6 +71,23 @@ function reserveSeat(
   return `Reservation successful: seat ${normalizedRowLetter}${columnNumber} has been reserved.`;
 }
 
+function countSeats(seatingMatrix: SeatingMatrix): SeatCountSummary {
+  let occupied = 0;
+  let available = 0;
+
+  for (const row of seatingMatrix) {
+    for (const seat of row) {
+      if (seat === 1) {
+        occupied += 1;
+      } else {
+        available += 1;
+      }
+    }
+  }
+
+  return { occupied, available };
+}
+
 const seatingMatrix = initializeSeatingMatrix();
 console.log("Cinema screening room (L = available, X = occupied):");
 displayScreeningRoom(seatingMatrix);
@@ -74,11 +95,16 @@ displayScreeningRoom(seatingMatrix);
 console.log(reserveSeat(seatingMatrix, "B", 3));
 console.log(reserveSeat(seatingMatrix, "B", 3));
 displayScreeningRoom(seatingMatrix);
+const seatCount = countSeats(seatingMatrix);
+console.log(`Occupied seats: ${seatCount.occupied}`);
+console.log(`Available seats: ${seatCount.available}`);
 
 export {
+  countSeats,
   displayScreeningRoom,
   initializeSeatingMatrix,
   reserveSeat,
+  type SeatCountSummary,
   type Seat,
   type SeatingMatrix,
 };
