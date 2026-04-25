@@ -3,24 +3,254 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hello World with Typescript</title>
+    <title>Cinema Seat Reservation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              cinema: {
+                bg: "#050507",
+                main: "#959595",
+                accent: "#BFA960",
+                burgundy: "#A00909",
+              },
+            },
+            fontFamily: {
+              display: ["Poppins", "ui-sans-serif", "system-ui", "sans-serif"],
+              body: ["Manrope", "ui-sans-serif", "system-ui", "sans-serif"],
+            },
+            boxShadow: {
+              glow: "0 0 0 1px rgba(191, 169, 96, 0.25), 0 18px 45px rgba(0, 0, 0, 0.45)",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&family=Poppins:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
   </head>
-  <body class="min-h-screen bg-slate-100 text-slate-900">
-    <main class="mx-auto flex min-h-screen max-w-2xl flex-col items-center justify-center gap-6 p-6">
-      <h1 class="text-4xl font-bold tracking-tight">Hello World with Typescript</h1>
-
-      <section class="w-full max-w-md overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-        <img
-          src="/rigo-baby.jpg"
-          alt="Hello Rigo"
-          class="h-64 w-full bg-slate-50 object-contain p-2"
-        />
-        <div class="p-5">
-          <h2 class="text-xl font-semibold text-slate-900">Hello Rigo</h2>
-          <p id="app" class="mt-2 text-sm text-slate-600"></p>
+  <body class="min-h-screen bg-cinema-bg font-body text-cinema-main antialiased">
+    <header class="border-b border-cinema-main/25 bg-gradient-to-b from-cinema-main/10 to-cinema-bg/20">
+      <div class="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-6 sm:px-6 lg:px-8">
+        <div>
+          <p class="text-xs uppercase tracking-[0.25em] text-cinema-accent">Cinema Room</p>
+          <h1 class="font-display text-2xl font-bold text-white sm:text-3xl">Select Your Seats</h1>
         </div>
+        <p class="rounded-full border border-cinema-accent/40 bg-cinema-accent/10 px-4 py-2 text-xs uppercase tracking-[0.2em] text-cinema-accent">
+          8 Rows x 10 Seats
+        </p>
+      </div>
+    </header>
+
+    <main class="mx-auto flex min-h-[calc(100vh-96px)] w-full max-w-6xl items-center justify-center px-4 py-10 sm:px-6 lg:px-8">
+          <section aria-labelledby="seat-map-title" class="w-full rounded-3xl border border-cinema-main/25 bg-neutral-900/60 p-4 shadow-glow backdrop-blur-sm sm:p-8 md:origin-center md:scale-[1.2]">
+            <div>
+              <h2 id="seat-map-title" class="font-display text-xl font-semibold text-white sm:text-2xl">Cinema Seat Map</h2>
+              <p class="mt-2 max-w-4xl text-sm text-cinema-main">
+                Choose from the available seats. Reserved seats are marked in burgundy, and both side entrances are shown to help pick practical spots.
+              </p>
+            </div>
+
+        <div class="mt-8 grid gap-8 lg:grid-cols-[auto_1fr_auto] lg:items-center">
+          <aside aria-label="Left entrance" class="flex items-center justify-center">
+            <p class="-rotate-90 rounded-full border border-cinema-accent/35 bg-cinema-accent/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-cinema-accent">
+              Left Entrance
+            </p>
+          </aside>
+
+          <section aria-label="Seat grid" class="mx-auto w-full max-w-4xl">
+            <ol class="space-y-4">
+              <li class="grid grid-cols-[2rem_1fr] items-center gap-2">
+                <span class="font-display text-sm font-medium text-cinema-accent">A</span>
+                <ol class="grid grid-cols-10 gap-2 sm:gap-2.5" aria-label="Row A seats">
+                  <li><button type="button" aria-label="Seat A10 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:border-cinema-accent hover:bg-cinema-accent/20">10</button></li>
+                  <li><button type="button" aria-label="Seat A9 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:border-cinema-accent hover:bg-cinema-accent/20">9</button></li>
+                  <li><button type="button" aria-label="Seat A8 reserved" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-burgundy/80 bg-cinema-burgundy/85 text-sm font-bold text-white">8</button></li>
+                  <li><button type="button" aria-label="Seat A7 reserved" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-burgundy/80 bg-cinema-burgundy/85 text-sm font-bold text-white">7</button></li>
+                  <li><button type="button" aria-label="Seat A6 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:border-cinema-accent hover:bg-cinema-accent/20">6</button></li>
+                  <li><button type="button" aria-label="Seat A5 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:border-cinema-accent hover:bg-cinema-accent/20">5</button></li>
+                  <li><button type="button" aria-label="Seat A4 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:border-cinema-accent hover:bg-cinema-accent/20">4</button></li>
+                  <li><button type="button" aria-label="Seat A3 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:border-cinema-accent hover:bg-cinema-accent/20">3</button></li>
+                  <li><button type="button" aria-label="Seat A2 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:border-cinema-accent hover:bg-cinema-accent/20">2</button></li>
+                  <li><button type="button" aria-label="Seat A1 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:border-cinema-accent hover:bg-cinema-accent/20">1</button></li>
+                </ol>
+              </li>
+
+              <li class="grid grid-cols-[2rem_1fr] items-center gap-2">
+                <span class="font-display text-sm font-medium text-cinema-accent">B</span>
+                <ol class="grid grid-cols-10 gap-2 sm:gap-2.5" aria-label="Row B seats">
+                  <li><button type="button" aria-label="Seat B10 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">10</button></li>
+                  <li><button type="button" aria-label="Seat B9 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">9</button></li>
+                  <li><button type="button" aria-label="Seat B8 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">8</button></li>
+                  <li><button type="button" aria-label="Seat B7 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">7</button></li>
+                  <li><button type="button" aria-label="Seat B6 reserved" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-burgundy/80 bg-cinema-burgundy/85 text-sm font-bold text-white">6</button></li>
+                  <li><button type="button" aria-label="Seat B5 reserved" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-burgundy/80 bg-cinema-burgundy/85 text-sm font-bold text-white">5</button></li>
+                  <li><button type="button" aria-label="Seat B4 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">4</button></li>
+                  <li><button type="button" aria-label="Seat B3 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">3</button></li>
+                  <li><button type="button" aria-label="Seat B2 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">2</button></li>
+                  <li><button type="button" aria-label="Seat B1 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">1</button></li>
+                </ol>
+              </li>
+
+              <li class="grid grid-cols-[2rem_1fr] items-center gap-2">
+                <span class="font-display text-sm font-medium text-cinema-accent">C</span>
+                <ol class="grid grid-cols-10 gap-2 sm:gap-2.5" aria-label="Row C seats">
+                  <li><button type="button" aria-label="Seat C10 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">10</button></li>
+                  <li><button type="button" aria-label="Seat C9 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">9</button></li>
+                  <li><button type="button" aria-label="Seat C8 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">8</button></li>
+                  <li><button type="button" aria-label="Seat C7 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">7</button></li>
+                  <li><button type="button" aria-label="Seat C6 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">6</button></li>
+                  <li><button type="button" aria-label="Seat C5 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">5</button></li>
+                  <li><button type="button" aria-label="Seat C4 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">4</button></li>
+                  <li><button type="button" aria-label="Seat C3 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">3</button></li>
+                  <li><button type="button" aria-label="Seat C2 reserved" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-burgundy/80 bg-cinema-burgundy/85 text-sm font-bold text-white">2</button></li>
+                  <li><button type="button" aria-label="Seat C1 reserved" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-burgundy/80 bg-cinema-burgundy/85 text-sm font-bold text-white">1</button></li>
+                </ol>
+              </li>
+
+              <li class="grid grid-cols-[2rem_1fr] items-center gap-2">
+                <span class="font-display text-sm font-medium text-cinema-accent">D</span>
+                <ol class="grid grid-cols-10 gap-2 sm:gap-2.5" aria-label="Row D seats">
+                  <li><button type="button" aria-label="Seat D10 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">10</button></li>
+                  <li><button type="button" aria-label="Seat D9 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">9</button></li>
+                  <li><button type="button" aria-label="Seat D8 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">8</button></li>
+                  <li><button type="button" aria-label="Seat D7 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">7</button></li>
+                  <li><button type="button" aria-label="Seat D6 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">6</button></li>
+                  <li><button type="button" aria-label="Seat D5 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">5</button></li>
+                  <li><button type="button" aria-label="Seat D4 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">4</button></li>
+                  <li><button type="button" aria-label="Seat D3 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">3</button></li>
+                  <li><button type="button" aria-label="Seat D2 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">2</button></li>
+                  <li><button type="button" aria-label="Seat D1 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">1</button></li>
+                </ol>
+              </li>
+
+              <li class="grid grid-cols-[2rem_1fr] items-center gap-2">
+                <span class="font-display text-sm font-medium text-cinema-accent">E</span>
+                <ol class="grid grid-cols-10 gap-2 sm:gap-2.5" aria-label="Row E seats">
+                  <li><button type="button" aria-label="Seat E10 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">10</button></li>
+                  <li><button type="button" aria-label="Seat E9 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">9</button></li>
+                  <li><button type="button" aria-label="Seat E8 reserved" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-burgundy/80 bg-cinema-burgundy/85 text-sm font-bold text-white">8</button></li>
+                  <li><button type="button" aria-label="Seat E7 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">7</button></li>
+                  <li><button type="button" aria-label="Seat E6 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">6</button></li>
+                  <li><button type="button" aria-label="Seat E5 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">5</button></li>
+                  <li><button type="button" aria-label="Seat E4 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">4</button></li>
+                  <li><button type="button" aria-label="Seat E3 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">3</button></li>
+                  <li><button type="button" aria-label="Seat E2 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">2</button></li>
+                  <li><button type="button" aria-label="Seat E1 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">1</button></li>
+                </ol>
+              </li>
+
+              <li class="grid grid-cols-[2rem_1fr] items-center gap-2">
+                <span class="font-display text-sm font-medium text-cinema-accent">F</span>
+                <ol class="grid grid-cols-10 gap-2 sm:gap-2.5" aria-label="Row F seats">
+                  <li><button type="button" aria-label="Seat F10 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">10</button></li>
+                  <li><button type="button" aria-label="Seat F9 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">9</button></li>
+                  <li><button type="button" aria-label="Seat F8 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">8</button></li>
+                  <li><button type="button" aria-label="Seat F7 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">7</button></li>
+                  <li><button type="button" aria-label="Seat F6 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">6</button></li>
+                  <li><button type="button" aria-label="Seat F5 reserved" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-burgundy/80 bg-cinema-burgundy/85 text-sm font-bold text-white">5</button></li>
+                  <li><button type="button" aria-label="Seat F4 reserved" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-burgundy/80 bg-cinema-burgundy/85 text-sm font-bold text-white">4</button></li>
+                  <li><button type="button" aria-label="Seat F3 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">3</button></li>
+                  <li><button type="button" aria-label="Seat F2 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">2</button></li>
+                  <li><button type="button" aria-label="Seat F1 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">1</button></li>
+                </ol>
+              </li>
+
+              <li class="grid grid-cols-[2rem_1fr] items-center gap-2">
+                <span class="font-display text-sm font-medium text-cinema-accent">G</span>
+                <ol class="grid grid-cols-10 gap-2 sm:gap-2.5" aria-label="Row G seats">
+                  <li><button type="button" aria-label="Seat G10 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">10</button></li>
+                  <li><button type="button" aria-label="Seat G9 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">9</button></li>
+                  <li><button type="button" aria-label="Seat G8 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">8</button></li>
+                  <li><button type="button" aria-label="Seat G7 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">7</button></li>
+                  <li><button type="button" aria-label="Seat G6 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">6</button></li>
+                  <li><button type="button" aria-label="Seat G5 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">5</button></li>
+                  <li><button type="button" aria-label="Seat G4 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">4</button></li>
+                  <li><button type="button" aria-label="Seat G3 reserved" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-burgundy/80 bg-cinema-burgundy/85 text-sm font-bold text-white">3</button></li>
+                  <li><button type="button" aria-label="Seat G2 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">2</button></li>
+                  <li><button type="button" aria-label="Seat G1 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">1</button></li>
+                </ol>
+              </li>
+
+              <li class="grid grid-cols-[2rem_1fr] items-center gap-2">
+                <span class="font-display text-sm font-medium text-cinema-accent">H</span>
+                <ol class="grid grid-cols-10 gap-2 sm:gap-2.5" aria-label="Row H seats">
+                  <li><button type="button" aria-label="Seat H10 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">10</button></li>
+                  <li><button type="button" aria-label="Seat H9 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">9</button></li>
+                  <li><button type="button" aria-label="Seat H8 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">8</button></li>
+                  <li><button type="button" aria-label="Seat H7 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">7</button></li>
+                  <li><button type="button" aria-label="Seat H6 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">6</button></li>
+                  <li><button type="button" aria-label="Seat H5 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">5</button></li>
+                  <li><button type="button" aria-label="Seat H4 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">4</button></li>
+                  <li><button type="button" aria-label="Seat H3 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">3</button></li>
+                  <li><button type="button" aria-label="Seat H2 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">2</button></li>
+                  <li><button type="button" aria-label="Seat H1 available" class="h-12 w-full rounded-t-lg rounded-b-md border border-cinema-main/30 bg-cinema-main/20 text-sm font-bold text-white">1</button></li>
+                </ol>
+              </li>
+            </ol>
+
+            <div class="mt-8 rounded-2xl border border-cinema-accent/35 bg-cinema-accent/10 px-4 py-3 text-center">
+              <p class="font-display text-sm uppercase tracking-[0.25em] text-cinema-accent">Screen</p>
+            </div>
+          </section>
+
+          <aside aria-label="Right entrance" class="flex items-center justify-center">
+            <p class="rotate-90 rounded-full border border-cinema-accent/35 bg-cinema-accent/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-cinema-accent">
+              Right Entrance
+            </p>
+          </aside>
+        </div>
+
+        <footer class="mt-8 flex flex-col gap-4 border-t border-cinema-main/20 pt-5 sm:flex-row sm:items-end sm:justify-between">
+          <ul class="flex flex-wrap items-center gap-4 text-xs text-cinema-main" aria-label="Seat legend">
+            <li class="flex items-center gap-2"><span class="h-3.5 w-3.5 rounded-sm border border-cinema-main/40 bg-cinema-main/20"></span>Available</li>
+            <li class="flex items-center gap-2"><span class="h-3.5 w-3.5 rounded-sm border border-cinema-accent/50 bg-cinema-accent/30"></span>Selected</li>
+            <li class="flex items-center gap-2"><span class="h-3.5 w-3.5 rounded-sm border border-cinema-burgundy/70 bg-cinema-burgundy/85"></span>Reserved</li>
+          </ul>
+
+          <div class="self-end rounded-2xl border border-cinema-accent/35 bg-cinema-accent/10 p-2.5 sm:min-w-[11.9rem]">
+            <p class="text-[10px] font-semibold uppercase tracking-[0.2em] text-cinema-accent">Seats to Select</p>
+            <div class="mt-1.5 flex items-center justify-between gap-2">
+              <div class="inline-flex items-center rounded-full border border-cinema-accent/40 bg-cinema-bg/40 p-1">
+                <button
+                  id="seat-count-decrease"
+                  type="button"
+                  class="flex h-7 w-7 items-center justify-center rounded-full border border-transparent text-base font-semibold text-cinema-accent transition hover:border-cinema-accent/45 hover:bg-cinema-accent/20"
+                  aria-label="Decrease seat selection limit"
+                >
+                  -
+                </button>
+                <input
+                  id="seat-count-input"
+                  type="number"
+                  min="1"
+                  max="10"
+                  value="1"
+                  class="h-7 w-12 bg-transparent text-center text-xs font-semibold text-white outline-none"
+                  aria-label="Number of seats to select"
+                />
+                <button
+                  id="seat-count-increase"
+                  type="button"
+                  class="flex h-7 w-7 items-center justify-center rounded-full border border-transparent text-base font-semibold text-cinema-accent transition hover:border-cinema-accent/45 hover:bg-cinema-accent/20"
+                  aria-label="Increase seat selection limit"
+                >
+                  +
+                </button>
+              </div>
+              <p id="seat-selection-progress" class="text-[11px] font-medium text-cinema-main">0 selected</p>
+            </div>
+          </div>
+        </footer>
       </section>
     </main>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

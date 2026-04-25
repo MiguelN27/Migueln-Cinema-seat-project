@@ -145,18 +145,144 @@ function countAdjacentAvailableSeatPairs(seatingMatrix: SeatingMatrix): number {
   return adjacentPairs;
 }
 
-const seatingMatrix = initializeSeatingMatrix();
-console.log("Cinema screening room (L = available, X = occupied):");
-displayScreeningRoom(seatingMatrix);
+const AVAILABLE_SEAT_CLASSES = [
+  "border-cinema-main/30",
+  "bg-cinema-main/20",
+  "transition",
+  "hover:-translate-y-0.5",
+  "hover:border-cinema-accent",
+  "hover:bg-cinema-accent/20",
+];
 
-console.log(reserveSeat(seatingMatrix, "B", 3));
-console.log(reserveSeat(seatingMatrix, "B", 3));
-displayScreeningRoom(seatingMatrix);
-const seatCount = countSeats(seatingMatrix);
-console.log(`Occupied seats: ${seatCount.occupied}`);
-console.log(`Available seats: ${seatCount.available}`);
-console.log(findFirstAdjacentAvailableSeats(seatingMatrix));
-console.log(`Adjacent available seat pairs: ${countAdjacentAvailableSeatPairs(seatingMatrix)}`);
+const SELECTED_SEAT_CLASSES = [
+  "border-cinema-accent/50",
+  "bg-cinema-accent/30",
+  "text-white",
+];
+
+function setSeatAsAvailable(seatButton: HTMLButtonElement): void {
+  seatButton.classList.remove(...SELECTED_SEAT_CLASSES);
+  seatButton.classList.add(...AVAILABLE_SEAT_CLASSES);
+  const seatCode = seatButton.dataset.seatCode ?? seatButton.textContent?.trim() ?? "";
+  seatButton.setAttribute("aria-label", `Seat ${seatCode} available`);
+  seatButton.setAttribute("aria-pressed", "false");
+}
+
+function setSeatAsSelected(seatButton: HTMLButtonElement): void {
+  seatButton.classList.remove(...AVAILABLE_SEAT_CLASSES);
+  seatButton.classList.add(...SELECTED_SEAT_CLASSES);
+  const seatCode = seatButton.dataset.seatCode ?? seatButton.textContent?.trim() ?? "";
+  seatButton.setAttribute("aria-label", `Seat ${seatCode} selected`);
+  seatButton.setAttribute("aria-pressed", "true");
+}
+
+function initializeInteractiveSeatSelection(): void {
+  if (typeof document === "undefined") {
+    return;
+  }
+
+  const seatButtons = Array.from(
+    document.querySelectorAll<HTMLButtonElement>('section[aria-label="Seat grid"] button')
+  );
+
+  if (seatButtons.length === 0) {
+    return;
+  }
+
+  const availableSeatButtons = seatButtons.filter((button) => {
+    const ariaLabel = button.getAttribute("aria-label")?.toLowerCase() ?? "";
+    return ariaLabel.includes("available");
+  });
+
+  const seatCountInput = document.getElementById("seat-count-input") as HTMLInputElement | null;
+  const decreaseButton = document.getElementById("seat-count-decrease") as HTMLButtonElement | null;
+  const increaseButton = document.getElementById("seat-count-increase") as HTMLButtonElement | null;
+  const selectionProgress = document.getElementById("seat-selection-progress") as HTMLParagraphElement | null;
+
+  if (!seatCountInput || !decreaseButton || !increaseButton || !selectionProgress) {
+    return;
+  }
+
+  const seatCountInputElement = seatCountInput;
+  const decreaseButtonElement = decreaseButton;
+  const increaseButtonElement = increaseButton;
+  const selectionProgressElement = selectionProgress;
+
+  const maxSelectableSeats = availableSeatButtons.length;
+  const selectedSeats: HTMLButtonElement[] = [];
+
+  for (const seatButton of availableSeatButtons) {
+    const rawAriaLabel = seatButton.getAttribute("aria-label") ?? "";
+    const seatMatch = rawAriaLabel.match(/Seat\s+([A-Z]\d+)/i);
+    if (seatMatch) {
+      seatButton.dataset.seatCode = seatMatch[1].toUpperCase();
+    }
+
+    setSeatAsAvailable(seatButton);
+  }
+
+  function updateProgress(): void {
+    const maximum = Number(seatCountInputElement.value);
+    selectionProgressElement.textContent = `${selectedSeats.length} selected / ${maximum}`;
+  }
+
+  function updateSeatCountInput(value: number): void {
+    const clampedValue = Math.max(1, Math.min(value, maxSelectableSeats));
+    seatCountInputElement.value = String(clampedValue);
+    seatCountInputElement.max = String(maxSelectableSeats);
+
+    while (selectedSeats.length > clampedValue) {
+      const seatToUnselect = selectedSeats.pop();
+      if (seatToUnselect) {
+        setSeatAsAvailable(seatToUnselect);
+      }
+    }
+
+    updateProgress();
+  }
+
+  function toggleSeatSelection(seatButton: HTMLButtonElement): void {
+    const currentLimit = Number(seatCountInputElement.value);
+    const selectedSeatIndex = selectedSeats.indexOf(seatButton);
+
+    if (selectedSeatIndex >= 0) {
+      selectedSeats.splice(selectedSeatIndex, 1);
+      setSeatAsAvailable(seatButton);
+      updateProgress();
+      return;
+    }
+
+    if (selectedSeats.length >= currentLimit) {
+      return;
+    }
+
+    selectedSeats.push(seatButton);
+    setSeatAsSelected(seatButton);
+    updateProgress();
+  }
+
+  for (const seatButton of availableSeatButtons) {
+    seatButton.addEventListener("click", () => {
+      toggleSeatSelection(seatButton);
+    });
+  }
+
+  decreaseButtonElement.addEventListener("click", () => {
+    updateSeatCountInput(Number(seatCountInputElement.value) - 1);
+  });
+
+  increaseButtonElement.addEventListener("click", () => {
+    updateSeatCountInput(Number(seatCountInputElement.value) + 1);
+  });
+
+  seatCountInputElement.addEventListener("change", () => {
+    updateSeatCountInput(Number(seatCountInputElement.value));
+  });
+
+  updateSeatCountInput(Number(seatCountInputElement.value));
+}
+
+initializeInteractiveSeatSelection();
 
 export {
   countAdjacentAvailableSeatPairs,
